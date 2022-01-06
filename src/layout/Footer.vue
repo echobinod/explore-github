@@ -1,5 +1,5 @@
 <template>
-  <footer class="text-center text-white fixed-bottom">
+  <footer class="text-center text-white">
     <div class="container p-4"></div>
     <div class="text-center p-3 copyright">
       <a class="text-white" href="https://github.com/echobinod">@echobinod</a>

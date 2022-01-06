@@ -10,6 +10,7 @@
               placeholder="Search Repositories..."
               aria-describedby="button-addon1"
               class="form-control border-0 bg-light"
+              autofocus
             />
             <div class="input-group-append">
               <button
@@ -105,7 +106,7 @@ export default {
   methods: {
     async searchRepo() {
       this.repos = [];
-      const data = await RepoService.getRepo(this.repoInput);
+      const data = await RepoService.getRepos(this.repoInput);
       this.repos = data.items;
     },
     setPages() {
@@ -132,7 +133,7 @@ export default {
     async sortResult(sortBy) {
       this.repos = [];
       this.pages = [];
-      const data = await RepoService.sortRepo(sortBy, this.repoInput);
+      const data = await RepoService.sortRepos(sortBy, this.repoInput);
       this.repos = data.items;
     },
     filterPerPage(num) {

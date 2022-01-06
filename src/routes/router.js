@@ -15,7 +15,7 @@ export default new Router({
       component: HomePage,
     },
     {
-      path: "/repo",
+      path: "/repo/:id/:repo",
       name: "repoDetail",
       component: RepoDetail,
     },
