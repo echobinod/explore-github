@@ -17,24 +17,9 @@
         {{ repo.description }}
       </p>
       <div class="d-flex mb-2">
-        <div class="me-3">
-          <a href="#" class="card-link text-decoration-none" title="Star">
-            <i class="fa fa-star-o" aria-hidden="true"></i>
-            {{ repo.stargazers_count }}</a
-          >
-        </div>
-        <div class="me-3">
-          <a href="#" class="card-link text-decoration-none" title="Fork">
-            <i class="panel-icon fa fa-code-fork"></i>
-            {{ repo.forks }}</a
-          >
-        </div>
-        <div class="me-3">
-          <a href="#" class="card-link text-decoration-none" title="Watcher">
-            <i class="fa fa-eye" aria-hidden="true"></i>
-            {{ repo.watchers }}
-          </a>
-        </div>
+        <star :repo="repo"></star>
+        <fork :repo="repo"></fork>
+        <eye :repo="repo"></eye>
       </div>
       <span class="text-muted mb-2 timestamp">
         Last update:
@@ -45,7 +30,11 @@
 </template>
 
 <script>
+import star from "./icons/Star.vue";
+import fork from "./icons/Fork.vue";
+import eye from "./icons/Eye.vue";
 export default {
+  components: { fork, star, eye },
   name: "Card",
   props: ["repo", "gotoRepoDetail"],
 };
