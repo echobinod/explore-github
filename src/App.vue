@@ -12,7 +12,7 @@ export default {
   components: {},
 };
 </script>
-ß
+
 <style>
 :root {
   --c-ash: #eaeef6;

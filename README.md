@@ -1,10 +1,16 @@
 # explore-github
-
-## Project setup
+## Clone repository
+```
+git clone https://github.com/echobinod/explore-github.git
+```
+### Go to project directory
+```
+cd explore-github
+```
+### Install packages
 ```
 npm install
 ```
-
 ### Compiles and hot-reloads for development
 ```
 npm run serve
