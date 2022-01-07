@@ -10,7 +10,6 @@
               placeholder="Search Repositories..."
               aria-describedby="button-addon1"
               class="form-control border-0 bg-light"
-              autofocus
             />
             <div class="input-group-append">
               <button
@@ -24,22 +23,34 @@
           </div>
         </form>
       </div>
+      <div
+        class="form-control-feedback text-danger"
+        v-if="attemptSubmit && missingRepoInput"
+      >
+        This field is required.
+      </div>
       <div class="row justify-content-end mb-3">
-        <div class="col-1">
+        <div class="col-2">
           <label for="sort">Sort</label>
-          <select class="form-select" @change="sortResult($event.target.value)">
-            <option></option>
-            <option value="desc">DESC</option>
-            <option value="asc">ASC</option>
+          <select
+            class="form-select"
+            v-model="sortInput"
+            @change="sortResult(sortInput)"
+          >
+            <option value="stars"></option>
+            <option value="stars">Stars</option>
+            <option value="forks">Forks</option>
+            <option value="updated">Updated</option>
           </select>
         </div>
-        <div class="col-1">
+        <div class="col-2">
           <label for="filter">Filter</label>
           <select
             class="form-select"
-            @change="filterPerPage($event.target.value)"
+            v-model="filterInput"
+            @change="filterPerPage(filterInput)"
           >
-            <option></option>
+            <option value="6"></option>
             <option value="10">10</option>
             <option value="25">25</option>
             <option value="50">50</option>
@@ -90,6 +101,19 @@ import card from "@/components/Card.vue";
 export default {
   components: { BaseLayout, card },
   name: "HomePage",
+  computed: {
+    displayedRepos() {
+      return this.paginate(this.repos);
+    },
+    missingRepoInput() {
+      return this.repoInput === "";
+    },
+  },
+  watch: {
+    repos() {
+      this.setPages();
+    },
+  },
   mounted() {
     // this.repoInput = "vuejs";
     // await this.searchRepo();
@@ -101,13 +125,22 @@ export default {
       page: 1,
       perPage: 6,
       pages: [],
+      attemptSubmit: false,
+      sortInput: "",
+      filterInput: "",
     };
   },
   methods: {
-    async searchRepo() {
-      this.repos = [];
-      const data = await RepoService.getRepos(this.repoInput);
-      this.repos = data.items;
+    async searchRepo(event) {
+      if (this.missingRepoInput) {
+        this.attemptSubmit = true;
+        event.preventDefault();
+      } else {
+        this.repos = [];
+        this.pages = [];
+        const data = await RepoService.getRepos(this.repoInput);
+        this.repos = data.items;
+      }
     },
     setPages() {
       let numberOfPages = Math.ceil(this.repos.length / this.perPage);
@@ -131,25 +164,24 @@ export default {
       });
     },
     async sortResult(sortBy) {
-      this.repos = [];
-      this.pages = [];
-      const data = await RepoService.sortRepos(sortBy, this.repoInput);
-      this.repos = data.items;
+      if (this.missingRepoInput) {
+        this.attemptSubmit = true;
+      } else {
+        this.repos = [];
+        this.pages = [];
+        const data = await RepoService.sortRepos(sortBy, this.repoInput);
+        this.repos = data.items;
+      }
     },
     filterPerPage(num) {
-      this.perPage = num;
-      this.pages = [];
-      this.setPages();
-    },
-  },
-  computed: {
-    displayedRepos() {
-      return this.paginate(this.repos);
-    },
-  },
-  watch: {
-    repos() {
-      this.setPages();
+      if (this.missingRepoInput) {
+        this.attemptSubmit = true;
+      } else {
+        this.attemptSubmit = false;
+        this.perPage = num;
+        this.pages = [];
+        this.setPages();
+      }
     },
   },
 };
